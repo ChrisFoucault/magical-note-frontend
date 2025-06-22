@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:example_project_01/NoteEditorPage.dart';
 import 'package:flutter/material.dart';
-import '../api/user.dart';
 
 void main() {
   runApp(const MyApp());
@@ -72,10 +70,6 @@ class NoteCard extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('你点击了第 $index 张卡片')),
               );
-              UserApi.login(
-                  123
-              ).then((res) {
-              });
             },
           ),
         );
