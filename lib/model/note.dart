@@ -1,15 +1,20 @@
-class Note {
-  final String? id;
-  final String title;
-  final String content;
+import 'dart:ffi';
+import 'dart:math';
 
-  Note({this.id, required this.title, required this.content});
+import 'package:example_project_01/model/note_detail.dart';
+
+class Note {
+  final int id;
+  final String title;
+  final NoteDetail noteDetail;
+
+  Note({required this.id, required this.title, required this.noteDetail});
 
   factory Note.fromJson(Map<String, dynamic> json) {
     return Note(
       id: json['id'],
       title: json['title'],
-      content: json['content'],
+      noteDetail: NoteDetail.fromJson(json['noteDetail']),
     );
   }
 
@@ -17,7 +22,7 @@ class Note {
     return {
       'id': id,
       'title': title,
-      'content': content,
+      'noteDetail': noteDetail.toJson(),
     };
   }
 }

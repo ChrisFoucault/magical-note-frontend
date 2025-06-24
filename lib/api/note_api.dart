@@ -1,5 +1,7 @@
-import 'package:dio/dio.dart';
+import 'dart:math';
+
 import '../model/note.dart';
+import '../model/note_detail.dart';
 import '../utils//http_service.dart';
 
 class NoteApi {
@@ -20,5 +22,10 @@ class NoteApi {
 
   static Future<void> deleteNote(String id) async {
     await HttpService.delete('/api/notes/$id');
+  }
+
+  static Future<List<Note>> listPreviewNote(userId) async {
+    final res = await HttpService.get('/note/listPreviewNote', params: { 'userId': userId });
+    return (res.data as List).map((e) => Note.fromJson(e)).toList();
   }
 }

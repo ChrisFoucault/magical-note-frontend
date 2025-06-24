@@ -1,6 +1,9 @@
 import 'dart:math';
+
+import '/api/note_api.dart';
 import 'package:example_project_01/NoteEditorPage.dart';
 import 'package:flutter/material.dart';
+import '/model/note.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,30 +53,52 @@ class Home extends StatelessWidget {
   }
 }
 
-class NoteCard extends StatelessWidget {
+class NoteCard extends StatefulWidget  {
   const NoteCard({super.key});
 
   @override
+  State<NoteCard> createState() => _NoteCardState();
+}
+
+class _NoteCardState extends State<NoteCard> {
+  List<Note> noteList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotes();
+  }
+
+  Future<void> loadNotes() async {
+    final notes = await NoteApi.listPreviewNote(1);
+    setState(() {
+      noteList = notes;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.all(12),
-      children: List.generate(5, (index) {
+      itemCount: noteList.length,
+      itemBuilder: (context, index) {
+        final note = noteList[index];
         return Card(
           elevation: 4,
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: ListTile(
             leading: const Icon(Icons.note),
-            title: Text('笔记 $index'),
-            subtitle: Text('笔记内容'),
+            title: Text(note.title ?? '无标题'),
+            subtitle: Text(note.noteDetail.blocks[0]['content'] ?? '无内容'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('你点击了第 $index 张卡片')),
+                SnackBar(content: Text('你点击了 ${note.title}')),
               );
             },
           ),
         );
-      }),
+      },
     );
   }
 }
